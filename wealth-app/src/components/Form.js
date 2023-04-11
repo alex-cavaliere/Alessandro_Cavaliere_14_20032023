@@ -4,8 +4,6 @@ import DatePicker from "react-datepicker";
 import Select from 'react-select'
 import "react-datepicker/dist/react-datepicker.css"
 
-const data = JSON.parse(localStorage.getItem('employees'))
-console.log(data)
 
 const customStyles = {
     content: {
@@ -36,13 +34,17 @@ function Form(){
             lastName: e.target.lastName.value,
             dateOfBirth: e.target.dateOfBirth.value,
             startDate: e.target.startDate.value,
+            department: e.target.department.value,
             street: e.target.street.value,
+            state: e.target.state.value,
             city: e.target.city.value,
             zipCode: e.target.zipCode.value
         } 
         employees.push(employee)
         localStorage.setItem('employees', JSON.stringify(employees))
+        localStorage.getItem('employees')
         openModal()
+        console.log(employee)
     }
     const [modalIsOpen, setIsOpen] = useState(false);
   
@@ -76,6 +78,7 @@ function Form(){
                 <input id="city" type="text" name="city"/>
 
                 <label htmlFor="state">State</label>
+                <Select options={states} name="state" />
 
 
                 <label htmlFor="zip-code">Zip Code</label>
@@ -83,7 +86,7 @@ function Form(){
             </fieldset>
 
             <label htmlFor="department">Department</label>
-            <Select options={options} />
+            <Select options={options} name="department" />
             <button id="submit">save</button>
             <Modal
                 isOpen={modalIsOpen}
@@ -98,3 +101,243 @@ function Form(){
 }
 
 export default Form
+
+
+const states = [
+    {
+        label: "Alabama",
+        value: "AL"
+    },
+    {
+        label: "Alaska",
+        value: "AK"
+    },
+    {
+        label: "American Samoa",
+        value: "AS"
+    },
+    {
+        label: "Arizona",
+        value: "AZ"
+    },
+    {
+        label: "Arkansas",
+        value: "AR"
+    },
+    {
+        label: "California",
+        value: "CA"
+    },
+    {
+        label: "Colorado",
+        value: "CO"
+    },
+    {
+        label: "Connecticut",
+        value: "CT"
+    },
+    {
+        label: "Delaware",
+        value: "DE"
+    },
+    {
+        label: "District Of Columbia",
+        value: "DC"
+    },
+    {
+        label: "Federated States Of Micronesia",
+        value: "FM"
+    },
+    {
+        label: "Florida",
+        value: "FL"
+    },
+    {
+        label: "Georgia",
+        value: "GA"
+    },
+    {
+        label: "Guam",
+        value: "GU"
+    },
+    {
+        label: "Hawaii",
+        value: "HI"
+    },
+    {
+        label: "Idaho",
+        value: "ID"
+    },
+    {
+        label: "Illinois",
+        value: "IL"
+    },
+    {
+        label: "Indiana",
+        value: "IN"
+    },
+    {
+        label: "Iowa",
+        value: "IA"
+    },
+    {
+        label: "Kansas",
+        value: "KS"
+    },
+    {
+        label: "Kentucky",
+        value: "KY"
+    },
+    {
+        label: "Louisiana",
+        value: "LA"
+    },
+    {
+        label: "Maine",
+        value: "ME"
+    },
+    {
+        label: "Marshall Islands",
+        value: "MH"
+    },
+    {
+        label: "Maryland",
+        value: "MD"
+    },
+    {
+        label: "Massachusetts",
+        value: "MA"
+    },
+    {
+        label: "Michigan",
+        value: "MI"
+    },
+    {
+        label: "Minnesota",
+        value: "MN"
+    },
+    {
+        label: "Mississippi",
+        value: "MS"
+    },
+    {
+        label: "Missouri",
+        value: "MO"
+    },
+    {
+        label: "Montana",
+        value: "MT"
+    },
+    {
+        label: "Nebraska",
+        value: "NE"
+    },
+    {
+        label: "Nevada",
+        value: "NV"
+    },
+    {
+        label: "New Hampshire",
+        value: "NH"
+    },
+    {
+        label: "New Jersey",
+        value: "NJ"
+    },
+    {
+        label: "New Mexico",
+        value: "NM"
+    },
+    {
+        label: "New York",
+        value: "NY"
+    },
+    {
+        label: "North Carolina",
+        value: "NC"
+    },
+    {
+        label: "North Dakota",
+        value: "ND"
+    },
+    {
+        label: "Northern Mariana Islands",
+        value: "MP"
+    },
+    {
+        label: "Ohio",
+        value: "OH"
+    },
+    {
+        label: "Oklahoma",
+        value: "OK"
+    },
+    {
+        label: "Oregon",
+        value: "OR"
+    },
+    {
+        label: "Palau",
+        value: "PW"
+    },
+    {
+        label: "Pennsylvania",
+        value: "PA"
+    },
+    {
+        label: "Puerto Rico",
+        value: "PR"
+    },
+    {
+        label: "Rhode Island",
+        value: "RI"
+    },
+    {
+        label: "South Carolina",
+        value: "SC"
+    },
+    {
+        label: "South Dakota",
+        value: "SD"
+    },
+    {
+        label: "Tennessee",
+        value: "TN"
+    },
+    {
+        label: "Texas",
+        value: "TX"
+    },
+    {
+        label: "Utah",
+        value: "UT"
+    },
+    {
+        label: "Vermont",
+        value: "VT"
+    },
+    {
+        label: "Virgin Islands",
+        value: "VI"
+    },
+    {
+        label: "Virginia",
+        value: "VA"
+    },
+    {
+        label: "Washington",
+        value: "WA"
+    },
+    {
+        label: "West Virginia",
+        value: "WV"
+    },
+    {
+        label: "Wisconsin",
+        value: "WI"
+    },
+    {
+        label: "Wyoming",
+        value: "WY"
+    }
+]

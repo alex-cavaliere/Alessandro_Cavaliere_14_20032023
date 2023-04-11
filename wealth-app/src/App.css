@@ -64,3 +64,6 @@ td, th {
   border: 2px solid black;
   padding: 1rem;
 }
+.empty-list, table {
+  margin: 2rem
+}

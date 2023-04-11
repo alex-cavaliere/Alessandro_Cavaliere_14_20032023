@@ -1,9 +1,9 @@
 import { NavLink } from "react-router-dom"
 
-const data = JSON.parse(localStorage.getItem('employees'))
 
 function EmployeeList() {
-    console.log(data)
+    //console.log(data)
+    const data = JSON.parse(localStorage.getItem('employees'))
     return(
         <div id="employee-div" className="container">
             <h3>Current Employees</h3>
@@ -23,36 +23,23 @@ function EmployeeList() {
                     <input type="text" id="searchbar" name="searchbar"/>
                 </div>
             </div>
-            <table>
+            {localStorage.length > 0 ? (<table>
                 <thead>
                     <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Start Date</th>
-                        <th>Department</th>
-                        <th>Date Of Birth</th>
-                        <th>Street</th>
-                        <th>City</th>
-                        <th>State</th>
-                        <th>Zip Code</th>
+                    {
+                        Object.keys(data[0]).map((key, index) => <th key={key + index}>{key.replace(/([A-Z])/g, ' $1')
+                        .replace(/^./, function(str){ return str.toUpperCase(); })}</th>)
+                    }
                     </tr>
                 </thead>
                 <tbody>
-                        {
-                            data.map((obj, index) => <tr>
-                                <td>{obj.firstName}</td>
-                                <td>{obj.lastName}</td>
-                                <td>{obj.startDate}</td>
-                                <td>{obj.departement}</td>
-                                <td>{obj.dateOfBirth}</td>
-                                <td>{obj.street}</td>
-                                <td>{obj.city}</td>
-                                <td>{obj.state}</td>
-                                <td>{obj.zipCode}</td>
-                            </tr>)
-                        }
+                    {
+                        data.map((obj, index) => <tr key={obj + index}>
+                                {Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
+                        </tr>)
+                    }
                 </tbody>
-            </table>
+            </table>) : <div className="empty-list">There's no Employees</div>}
             <NavLink to="/">Home</NavLink>
         </div>
     )
