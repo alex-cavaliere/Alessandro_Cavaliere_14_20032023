@@ -64,6 +64,9 @@ td, th {
   border: 2px solid black;
   padding: 1rem;
 }
+th:hover {
+  cursor: pointer;
+}
 .empty-list, table {
   margin: 2rem
 }
