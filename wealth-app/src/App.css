@@ -70,3 +70,15 @@ th:hover {
 .empty-list, table {
   margin: 2rem
 }
+.chevrons{
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+.chevrons i {
+  opacity: 0.2;
+}
+.data-title{
+  display: flex;
+  align-items: center;
+}
