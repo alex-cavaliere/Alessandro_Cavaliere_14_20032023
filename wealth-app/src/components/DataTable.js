@@ -8,6 +8,22 @@ function DataTable(props) {
     const sortData = (e) => {
         //
         //
+        const chevrons = document.querySelectorAll('.chevrons')
+        console.log(chevrons)
+        chevrons.forEach((chevron, index) => {
+            console.log(chevron, index)
+            if(ascendent) {
+                chevron.children[0].classList.remove('unsorted')
+                chevron.children[1].classList.add('unsorted')
+                console.log('chevron up', chevron.children[0])
+            }else{
+                chevron.children[1].classList.remove('unsorted')
+                chevron.children[0].classList.add('unsorted')
+                console.log('chevron down', chevron.children[1])
+            }
+        })
+        //
+        //
         switch (e.target.innerText) {
             case 'First Name': 
             if(ascendent){
@@ -96,15 +112,15 @@ function DataTable(props) {
         console.log(sortedData)
     }
     const searchEmployee = (e) => {
-        console.log(e.target.value)
         let value = e.target.value
-        if (value.length >= 3){
-            sortedData.forEach((obj) => {
-                if(value.includes(Object.values(obj))){
-                    setSortedData(obj)
-                }
-            })
-        }
+        let result = []
+        sortedData.filter((employee) => {
+            console.log(value)
+            if(employee.firstName.toLowerCase().includes(value.toLowerCase())) {
+                result.push(employee)
+            }
+        })
+        console.log(result)
     }
     return(
         <div id="employee-div" className="container">
@@ -122,7 +138,7 @@ function DataTable(props) {
                 </div>
                 <div className="search-container">
                     <label htmlFor="searchbar">Search:</label>
-                    <input onKeyDown={searchEmployee} type="text" id="searchbar" name="searchbar"/>
+                    <input onKeyUp={searchEmployee} type="text" id="searchbar" name="searchbar"/>
                 </div>
             </div>
             {localStorage.length > 0 ? (<table>
@@ -134,8 +150,8 @@ function DataTable(props) {
                                 {key.replace(/([A-Z])/g, ' $1')
                                 .replace(/^./, function(str){ return str.toUpperCase()})}
                                 <span className="chevrons">
-                                    <i id='chevron-up' className="fa-solid fa-caret-up"></i>
-                                    <i id="chevron-down" className="fa-solid fa-caret-down"></i>
+                                    <i id='chevron-up' className="fa-solid fa-caret-up unsorted"></i>
+                                    <i id="chevron-down" className="fa-solid fa-caret-down unsorted"></i>
                                 </span>
                             </span>
                         </th>)

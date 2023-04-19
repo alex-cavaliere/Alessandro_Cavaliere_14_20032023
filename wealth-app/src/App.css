@@ -75,7 +75,7 @@ th:hover {
   flex-direction: column;
   margin-left: 2rem;
 }
-.chevrons i {
+.unsorted{
   opacity: 0.2;
 }
 .data-title{
