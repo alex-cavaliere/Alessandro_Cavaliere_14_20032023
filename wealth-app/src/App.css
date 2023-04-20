@@ -3,7 +3,10 @@
   align-items: center;
   justify-content: center;
 }
-
+#employee-div{
+  margin: auto;
+  width: 85%;
+}
 .container, header {
   display: flex;
   flex-direction: column;
@@ -19,7 +22,9 @@ fieldset{
   border-radius: 10px;
   background-color: #687e12;
 }
-
+.list-title{
+  font-size: 2rem;
+}
 #create-employee label {
   display: block;
   margin-top: 1rem;
@@ -47,10 +52,9 @@ button{
   padding: 0.5rem 0.8rem;
 }
 
-
 .table-header {
   display: flex;
-  width: 95%;
+  width: 100%;
   align-items: center;
   justify-content: space-between;
 }
@@ -60,7 +64,7 @@ button{
 .search-container label {
   padding-right: 0.5rem;
 }
-td, th {
+td, tr {
   border: 2px solid black;
   padding: 1rem;
 }
@@ -70,15 +74,21 @@ th:hover {
 .empty-list, table {
   margin: 2rem
 }
+.empty-list {
+  text-align: center;
+}
 .chevrons{
   display: flex;
   flex-direction: column;
-  margin-left: 2rem;
+  margin-left: 0.5rem;
+}
+.chevrons i {
+  height: 7px;
 }
 .unsorted{
   opacity: 0.2;
 }
 .data-title{
   display: flex;
-  align-items: center;
+  justify-content: center;
 }

@@ -5,6 +5,7 @@ function DataTable(props) {
     const data = props.data
     const [sortedData, setSortedData] = useState(data)
     const [ascendent, setAscendent] = useState(true)
+    const [unFound, setUnFound] = useState(false)
     const sortData = (e) => {
         //
         //
@@ -111,24 +112,40 @@ function DataTable(props) {
         }
         console.log(sortedData)
     }
+    /*
+    const [entry, setEntry] = useState(10)
+    const [firstEntry, setFirstEntry] = useState(0)
+    const maxEntries, setMaxEntries] = useState(0)
+    */
+    const handleChange = (e) => {
+        console.log(e.target.value)
+    }
+
     const searchEmployee = (e) => {
         let value = e.target.value
         let result = []
-        sortedData.filter((employee) => {
-            console.log(value)
-            if(employee.firstName.toLowerCase().includes(value.toLowerCase())) {
+        data.filter((employee) => {
+            const EmployeeList = JSON.stringify(Object.values(employee))
+            if(EmployeeList.toLowerCase().includes(value.toLowerCase())) {
                 result.push(employee)
+                setSortedData(result)
+            }else if(result.length < 1){
+                setUnFound(true)
+                console.log('not found')
+            }else{
+                setUnFound(false)
             }
+            return sortedData
         })
         console.log(result)
     }
     return(
         <div id="employee-div" className="container">
-            <h3>Current Employees</h3>
+            <h3 className='list-title'>Current Employees</h3>
             <div className="table-header">
                 <div className="entries">
                 Show
-                <select>
+                <select onChange={handleChange}>
                     <option>10</option>
                     <option>25</option>
                     <option>50</option>
@@ -145,7 +162,7 @@ function DataTable(props) {
                 <thead>
                     <tr>
                     {
-                        Object.keys(sortedData[0]).map((key, index) => <th onClick={sortData} key={key + index}>
+                        Object.keys(data[0]).map((key, index) => <th onClick={sortData} key={key + index}>
                             <span className="data-title">
                                 {key.replace(/([A-Z])/g, ' $1')
                                 .replace(/^./, function(str){ return str.toUpperCase()})}
@@ -158,13 +175,20 @@ function DataTable(props) {
                     }
                     </tr>
                 </thead>
-                <tbody>
-                    {
-                        sortedData.map((obj, index) => <tr key={obj + index}>
-                                {Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
-                        </tr>)
-                    }
-                </tbody>
+                {
+                    !unFound ? (<tbody>
+                        {
+                            sortedData.map((obj, index) => <tr key={obj + index}>
+                                    {Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
+                            </tr>)
+                        }
+                    </tbody>) : <tbody><tr><td colSpan='10' className="empty-list">No Data Found</td></tr></tbody>
+                }
+                <tfoot>
+                    <tr>
+                        <td colSpan='7' style={{border:'none'}}>Showing {sortedData.indexOf(sortedData[1])} To {sortedData.length} Of {sortedData.length} Entries</td>
+                    </tr>
+                </tfoot>
             </table>) : <div className="empty-list">There's no Data</div>}
             <NavLink to="/">Home</NavLink>
         </div>
