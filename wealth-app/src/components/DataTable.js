@@ -9,22 +9,46 @@ function DataTable(props) {
     const sortData = (e) => {
         //
         //
-        const chevrons = document.querySelectorAll('.chevrons')
-        console.log(chevrons)
-        chevrons.forEach((chevron, index) => {
-            console.log(chevron, index)
-            if(ascendent) {
-                chevron.children[0].classList.remove('unsorted')
-                chevron.children[1].classList.add('unsorted')
-                console.log('chevron up', chevron.children[0])
-            }else{
-                chevron.children[1].classList.remove('unsorted')
-                chevron.children[0].classList.add('unsorted')
-                console.log('chevron down', chevron.children[1])
-            }
-        })
+        const filterId = e.target.id
+        const tableList = document.querySelectorAll('th')
         //
         //
+        switch(filterId) {
+            case filterId :
+                if(ascendent){
+                    setSortedData([...sortedData].sort((a, b) => {return a[filterId].localeCompare(b[filterId])}))
+                    tableList.forEach((table) => {
+                        let chevronUp = table.children[0].children[0].children[0]
+                        let chevronDown = table.children[0].children[0].children[1]
+                        if (table.id === filterId){
+                            chevronUp.classList.remove('unsorted')
+                            chevronDown.classList.add('unsorted')
+                            setAscendent(false)
+                        }else{
+                            chevronUp.classList.add('unsorted')
+                            chevronDown.classList.remove('unsorted')
+                        }
+                    })    
+                }else{
+                    setSortedData([...sortedData].sort((a, b) => {return b[filterId].localeCompare(a[filterId])}))
+                    tableList.forEach((table) => {
+                        let chevronUp = table.children[0].children[0].children[0]
+                        let chevronDown = table.children[0].children[0].children[1]
+                        if (table.id === filterId){
+                            chevronUp.classList.add('unsorted')
+                            chevronDown.classList.remove('unsorted')
+                            setAscendent(true)
+                        }else{
+                            chevronUp.classList.add('unsorted')
+                            chevronDown.classList.remove('unsorted')
+                        }
+                    })    
+                }
+                break;
+                default :
+                    return sortedData
+        }
+        /*
         switch (e.target.innerText) {
             case 'First Name': 
             if(ascendent){
@@ -110,7 +134,8 @@ function DataTable(props) {
             default: 
             return sortedData
         }
-        console.log(sortedData)
+        */
+        //console.log(sortedData)
     }
     /*
     const [entry, setEntry] = useState(10)
@@ -129,7 +154,7 @@ function DataTable(props) {
             if(EmployeeList.toLowerCase().includes(value.toLowerCase())) {
                 result.push(employee)
                 setSortedData(result)
-            }else if(result.length < 1){
+            }if(result.length < 1){
                 setUnFound(true)
                 console.log('not found')
             }else{
@@ -162,15 +187,15 @@ function DataTable(props) {
                 <thead>
                     <tr>
                     {
-                        Object.keys(data[0]).map((key, index) => <th onClick={sortData} key={key + index}>
-                            <span className="data-title">
+                        Object.keys(data[0]).map((key, index) => <th id={key} onClick={sortData} key={key + index}>
+                            <div id={key} className="data-title" >
                                 {key.replace(/([A-Z])/g, ' $1')
                                 .replace(/^./, function(str){ return str.toUpperCase()})}
                                 <span className="chevrons">
                                     <i id='chevron-up' className="fa-solid fa-caret-up unsorted"></i>
                                     <i id="chevron-down" className="fa-solid fa-caret-down unsorted"></i>
                                 </span>
-                            </span>
+                            </div>
                         </th>)
                     }
                     </tr>
