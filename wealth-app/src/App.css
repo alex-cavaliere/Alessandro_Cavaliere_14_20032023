@@ -35,6 +35,7 @@ fieldset{
   margin-top: 10px;
 }
 a, button {
+  font-family: 'Copperplate';
   text-decoration: none;
   border: 1px solid black;
   border-radius: 20px;
@@ -43,8 +44,7 @@ a, button {
   font-weight: bold;
   background-color: #687e12;
 }
-button{
-  font-family: 'Copperplate';
+#create-employee button{
   margin-top: 1rem;
   padding: 1rem 2rem 1rem 2rem;
 }
@@ -70,6 +70,18 @@ td, tr {
 }
 th:hover {
   cursor: pointer;
+}
+tfoot td {
+  border: none;
+}
+.pages > div{
+  text-align: center;
+  margin: auto;
+  border-radius: 5px;
+  border: 1px solid #979797;
+  padding: 1rem;
+  width: 30%;
+  background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);
 }
 .empty-list, table {
   margin: 2rem
