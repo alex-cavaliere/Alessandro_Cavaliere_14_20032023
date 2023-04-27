@@ -51,7 +51,10 @@ a, button {
 .close{
   padding: 0.5rem 0.8rem;
 }
-
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 .table-header {
   display: flex;
   width: 100%;
@@ -64,9 +67,17 @@ a, button {
 .search-container label {
   padding-right: 0.5rem;
 }
-td, tr {
-  border: 2px solid black;
+td {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
   padding: 1rem;
+}
+th {
+  border-bottom: 1px solid black;
+}
+th div {
+  width: max-content;
+  padding: 0.8rem 1rem;
 }
 th:hover {
   cursor: pointer;

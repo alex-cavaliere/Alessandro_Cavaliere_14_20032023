@@ -6,13 +6,10 @@ function DataTable(props) {
     const [sortedData, setSortedData] = useState(data)
     const [ascendent, setAscendent] = useState(true)
     const [unFound, setUnFound] = useState(false)
-    const sortData = (e) => {
-        //
-        //
-        const filterId = e.target.id
+
+    const sortData = (filterId) => {
+        //const filterId = e.target.id
         const tableList = document.querySelectorAll('th')
-        //
-        //
         switch(filterId) {
             case filterId :
                 if(ascendent){
@@ -56,7 +53,6 @@ function DataTable(props) {
     const handleChange = (e) => {
         setEntry(JSON.parse(e.target.value))
     }
-    console.log(entry)
     const searchEmployee = (e) => {
         let value = e.target.value
         let result = []
@@ -98,13 +94,13 @@ function DataTable(props) {
                 <thead>
                     <tr>
                     {
-                        Object.keys(data[0]).map((key, index) => <th id={key} onClick={sortData} key={key + index}>
+                        Object.keys(data[0]).map((key, index) => <th id={key} onClick={() => sortData(key)} key={key + index}>
                             <div id={key} className="data-title" >
                                 {key.replace(/([A-Z])/g, ' $1')
                                 .replace(/^./, function(str){ return str.toUpperCase()})}
                                 <span className="chevrons">
-                                    <i id='chevron-up' className="fa-solid fa-caret-up unsorted"></i>
-                                    <i id="chevron-down" className="fa-solid fa-caret-down unsorted"></i>
+                                    <i id='chevron-up' onClick={() => sortData(key)} className="fa-solid fa-caret-up unsorted"></i>
+                                    <i id="chevron-down" onClick={() => sortData(key)} className="fa-solid fa-caret-down unsorted"></i>
                                 </span>
                             </div>
                         </th>)
@@ -112,7 +108,7 @@ function DataTable(props) {
                     </tr>
                 </thead>
                 {
-                    !unFound ? (<tbody>
+                    !unFound ? (<tbody className='data-table'>
                         {
                             sortedData.map((obj, index) => <tr key={obj + index}>
                             {index < entry && Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
@@ -122,13 +118,13 @@ function DataTable(props) {
                 }
                 <tfoot>
                     <tr>
-                        <td colSpan='6'>Showing {sortedData.indexOf(sortedData[1])} To {sortedData.length > entry ? entry : sortedData.length} Of {sortedData.length} Entries</td>
+                        <td colSpan='6'>Showing {sortedData.indexOf(sortedData[1])} To {sortedData.length >= entry ? entry : sortedData.length} Of {sortedData.length} Entries</td>
                         <td>
                             <button>Preview</button>
                         </td>
                         <td className="pages">
                             <div>
-                                1
+                                {console.log(Math.ceil(sortedData.length/entry))}
                             </div>
                         </td>
                         <td>
