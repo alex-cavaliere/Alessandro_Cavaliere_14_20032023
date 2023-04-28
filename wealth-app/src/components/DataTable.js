@@ -71,6 +71,11 @@ function DataTable(props) {
         })
         console.log(result)
     }
+    let pages = []
+    const NumberOfPages = Math.ceil(sortedData.length/entry)
+    for(let i = 1; i <= NumberOfPages; i++){
+        pages.push(i)
+    }
     return(
         <div id="employee-div" className="container">
             <h3 className='list-title'>Current Employees</h3>
@@ -123,9 +128,7 @@ function DataTable(props) {
                             <button>Preview</button>
                         </td>
                         <td className="pages">
-                            <div>
-                                {console.log(Math.ceil(sortedData.length/entry))}
-                            </div>
+                            {pages.map(page => {return <div key={page}>{(page)}</div>})}
                         </td>
                         <td>
                             <button>Next</button>
