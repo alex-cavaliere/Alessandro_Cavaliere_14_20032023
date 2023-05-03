@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { NavLink } from "react-router-dom"
 
 function DataTable(props) {
@@ -47,7 +47,7 @@ function DataTable(props) {
         }
     }
     const [entry, setEntry] = useState(10)
-    const [firstEntry, setFirstEntry] = useState(0)
+    const [firstEntry, setFirstEntry] = useState(1)
     const [maxEntries, setMaxEntries] = useState(0)
 
     const handleChange = (e) => {
@@ -60,22 +60,47 @@ function DataTable(props) {
             const EmployeeList = JSON.stringify(Object.values(employee))
             if(EmployeeList.toLowerCase().includes(value.toLowerCase())) {
                 result.push(employee)
-                setSortedData(result)
             }if(result.length < 1){
                 setUnFound(true)
-                console.log('not found')
             }else{
                 setUnFound(false)
             }
-            return sortedData
+            return setSortedData(result)
         })
-        console.log(result)
+        //console.log(result)
     }
     let pages = []
     const NumberOfPages = Math.ceil(sortedData.length/entry)
     for(let i = 1; i <= NumberOfPages; i++){
         pages.push(i)
     }
+    const selectPage = (e) => {
+        const page = JSON.parse(e.target.innerText)
+        if(page === 1){
+            setFirstEntry(1)
+            setMaxEntries(entry)
+        }else if(sortedData.length <= entry * page) {
+            setMaxEntries(sortedData.length)
+        }else{
+            setMaxEntries(entry * page)
+        }
+        setFirstEntry(((page * entry) - entry + 1))
+    }
+    useEffect(() => {    
+        if(sortedData.length >= entry){
+            setMaxEntries(entry)
+            console.log('entry selezionata')
+        }else{
+            setMaxEntries(sortedData.length)
+            console.log('lista length')
+        }if(unFound){
+            setFirstEntry(0)
+            setMaxEntries(0)
+        }else{
+            setFirstEntry(1)
+        }
+    },[entry, sortedData.length, unFound])
+    console.log(firstEntry,maxEntries)
     return(
         <div id="employee-div" className="container">
             <h3 className='list-title'>Current Employees</h3>
@@ -95,12 +120,12 @@ function DataTable(props) {
                     <input onKeyUp={searchEmployee} type="text" id="searchbar" name="searchbar"/>
                 </div>
             </div>
-            {localStorage.length > 0 ? (<table>
+            {data.length > 0 ? (<table>
                 <thead>
                     <tr>
                     {
                         Object.keys(data[0]).map((key, index) => <th id={key} onClick={() => sortData(key)} key={key + index}>
-                            <div id={key} className="data-title" >
+                            <div id={key} className="data-title">
                                 {key.replace(/([A-Z])/g, ' $1')
                                 .replace(/^./, function(str){ return str.toUpperCase()})}
                                 <span className="chevrons">
@@ -115,20 +140,20 @@ function DataTable(props) {
                 {
                     !unFound ? (<tbody className='data-table'>
                         {
-                            sortedData.map((obj, index) => <tr key={obj + index}>
-                            {index < entry && Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
+                            sortedData.map((obj, index) => <tr key={index}>
+                            {index + 1 >= firstEntry && index < maxEntries && Object.values(obj).map((key, index) => <td key={key + index}>{key}</td>)}
                         </tr>)
                         }
                     </tbody>) : <tbody><tr><td colSpan='10' className="empty-list">No Data Found</td></tr></tbody>
                 }
                 <tfoot>
-                    <tr>
-                        <td colSpan='6'>Showing {sortedData.indexOf(sortedData[1])} To {sortedData.length >= entry ? entry : sortedData.length} Of {sortedData.length} Entries</td>
+                    <tr> 
+                        <td colSpan='6'>Showing {firstEntry} To {maxEntries} Of {sortedData.length} Entries {sortedData.length < data.length && ' (filtered from ' + data.length + ' total entries)'}</td>
                         <td>
                             <button>Preview</button>
                         </td>
                         <td className="pages">
-                            {pages.map(page => {return <div key={page}>{(page)}</div>})}
+                            {pages.map(page => {return <div onClick={selectPage} key={page}>{(page)}</div>})}
                         </td>
                         <td>
                             <button>Next</button>
