@@ -69,10 +69,13 @@ function DataTable(props) {
         })
         //console.log(result)
     }
+    
     let pages = []
-    const NumberOfPages = Math.ceil(sortedData.length/entry)
-    for(let i = 1; i <= NumberOfPages; i++){
-        pages.push(i)
+    if(localStorage.length > 0){
+        const NumberOfPages = Math.ceil(sortedData.length/entry)
+        for(let i = 1; i <= NumberOfPages; i++){
+            pages.push(i)
+        }
     }
     const selectPage = (e) => {
         const page = JSON.parse(e.target.innerText)
@@ -86,20 +89,22 @@ function DataTable(props) {
         }
         setFirstEntry(((page * entry) - entry + 1))
     }
-    useEffect(() => {    
-        if(sortedData.length >= entry){
-            setMaxEntries(entry)
-            console.log('entry selezionata')
-        }else{
-            setMaxEntries(sortedData.length)
-            console.log('lista length')
-        }if(unFound){
-            setFirstEntry(0)
-            setMaxEntries(0)
-        }else{
-            setFirstEntry(1)
+    useEffect(() => {
+        if(localStorage.length > 0){
+            if(sortedData.length >= entry){
+                setMaxEntries(entry)
+                console.log('entry selezionata')
+            }else{
+                setMaxEntries(sortedData.length)
+                console.log('lista length')
+            }if(unFound){
+                setFirstEntry(0)
+                setMaxEntries(0)
+            }else{
+                setFirstEntry(1)
+            }
         }
-    },[entry, sortedData.length, unFound])
+    },[entry, sortedData, unFound])
     console.log(firstEntry,maxEntries)
     return(
         <div id="employee-div" className="container">
@@ -120,7 +125,7 @@ function DataTable(props) {
                     <input onKeyUp={searchEmployee} type="text" id="searchbar" name="searchbar"/>
                 </div>
             </div>
-            {data.length > 0 ? (<table>
+            {localStorage.length > 0 ? (<table>
                 <thead>
                     <tr>
                     {
@@ -153,7 +158,7 @@ function DataTable(props) {
                             <button>Preview</button>
                         </td>
                         <td className="pages">
-                            {pages.map(page => {return <div onClick={selectPage} key={page}>{(page)}</div>})}
+                            {data.length > 0 && pages.map(page => {return <div onClick={selectPage} key={page}>{(page)}</div>})}
                         </td>
                         <td>
                             <button>Next</button>

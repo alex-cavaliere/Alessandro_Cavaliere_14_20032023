@@ -27,6 +27,7 @@ const options = [
 function Form(){
     const [startDate, setStartDate] = useState(new Date())
     const [dayOfBirth, setDayOfBirth] = useState(new Date())
+    console.log(dayOfBirth, startDate)
     const saveEmployee = (e) => {
         e.preventDefault()
         const employees = JSON.parse(localStorage.getItem('employees')) || []
@@ -64,10 +65,10 @@ function Form(){
             <input type="text" id="last-name" name="lastName" required/>
 
             <label htmlFor="date-of-birth">Date of Birth</label>
-            <DatePicker id="date-of-birth" name="dateOfBirth" selected={startDate} onChange={(date) => setStartDate(date)} />
+            <DatePicker id="date-of-birth" name="dateOfBirth" selected={dayOfBirth} onChange={(date) => setDayOfBirth(date)} />
 
             <label htmlFor="start-date">Start Date</label>
-            <DatePicker id="start-date" name="startDate" selected={dayOfBirth} onChange={(date) => setDayOfBirth(date)} />
+            <DatePicker id="start-date" name="startDate" selected={startDate} onChange={(date) => setStartDate(date)} />
 
             <fieldset className="address">
                 <legend>Address</legend>
