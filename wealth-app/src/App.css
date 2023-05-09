@@ -106,6 +106,10 @@ tfoot td {
   width: 30%;
   background: linear-gradient(to bottom, #fff 0%, #dcdcdc 100%);
 }
+#prev-btn, #next-btn {
+  border: none;
+  border-radius: 10px;
+}
 .empty-list, table {
   margin: 2rem
 }
