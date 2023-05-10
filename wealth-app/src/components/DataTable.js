@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { NavLink } from "react-router-dom"
 
 function DataTable(props) {
@@ -49,41 +49,53 @@ function DataTable(props) {
     const [entry, setEntry] = useState(10)
     const [firstEntry, setFirstEntry] = useState(1)
     const [maxEntries, setMaxEntries] = useState(entry)
-    const [currentPage, setCurrentPage] = useState(1)
 
     const handleChange = (e) => {
         setEntry(JSON.parse(e.target.value))
     }
-    const handleNext = () => {
-        pages.forEach(page => {
-            if(page === currentPage && currentPage < pages.length){
-                setCurrentPage(page + 1)
-            }
-        })
+    let currentPage = useRef(1)
+    const handlePrevNext = (e) => {
+        const handleButton = e.target
+        switch(handleButton.id){
+            case 'next-btn': 
+                if(currentPage.current < pages.length){
+                    currentPage.current++
+                    if(entry * currentPage.current <= sortedData.length){
+                        setFirstEntry(maxEntries + 1)
+                        setMaxEntries(entry * currentPage.current)
+                    }else{
+                        setFirstEntry(((currentPage.current * entry) - entry + 1))
+                        setMaxEntries(sortedData.length)
+                    }
+                }
+            break;
+            case 'prev-btn':
+                console.log('skip to prev page')
+                if(currentPage.current > 1){
+                    currentPage.current--
+                    setFirstEntry(firstEntry - entry)
+                    setMaxEntries(currentPage.current * entry)
+                }
+            break;
+            default:
+                return console.log('no action')
+        }
     }
-    const handlePrev = () => {
-        pages.forEach(page => {
-            if(currentPage === page && currentPage > 1){
-                setCurrentPage(page - 1)
-            }
-        })
-    }
+    console.log(currentPage.current)
     const searchEmployee = (e) => {
         let value = e.target.value
         let result = []
-        if(localStorage.length > 0){
-            data.filter((employee) => {
-                const EmployeeList = JSON.stringify(Object.values(employee))
-                if(EmployeeList.toLowerCase().includes(value.toLowerCase())) {
-                    result.push(employee)
-                }if(result.length < 1){
-                    setUnFound(true)
-                }else{
-                    setUnFound(false)
-                }
-                return setSortedData(result)
-            })
-        }
+        data.filter((employee) => {
+            const EmployeeList = JSON.stringify(Object.values(employee))
+            if(EmployeeList.toLowerCase().includes(value.toLowerCase())) {
+                result.push(employee)
+            }if(result.length < 1){
+                setUnFound(true)
+            }else{
+                setUnFound(false)
+            }
+            return setSortedData(result)
+        })
         //console.log(result)
     }
     
@@ -96,50 +108,57 @@ function DataTable(props) {
     }
     const selectPage = (e) => {
         const page = JSON.parse(e.target.innerText)
-        if(page === 1){
-            setCurrentPage(1)
+        currentPage.current = page
+        if(pages.length > 1){
+            if(page === 1){
+            setFirstEntry(1)
+            setMaxEntries(entry)
+        }else if(sortedData.length <= entry * page) {
+            setMaxEntries(sortedData.length)
+        }else{
+            setMaxEntries(entry * page)
         }
-        setCurrentPage((entry * page)/entry)
+        setFirstEntry(((page * entry) - entry + 1))
+        }
     }
-    console.log(currentPage)
     useEffect(() => {
         if(localStorage.length > 0){
-            if(unFound){
+            if(pages.length < 1){
+                currentPage.current = 0
+            }else{
+                currentPage.current = 1
+            }
+            if(sortedData.length >= entry){
+                setMaxEntries(entry)
+                //console.log('selected entry')
+            }else{
+                setMaxEntries(sortedData.length)
+                //console.log('sortedData.length')
+            }if(unFound){
                 setFirstEntry(0)
                 setMaxEntries(0)
-                setCurrentPage(0)
             }else{
                 setFirstEntry(1)
-                setCurrentPage(1)
             }
         }
-    },[entry, sortedData, unFound])
+    },[entry, pages.length, sortedData, unFound])
     //console.log(firstEntry,maxEntries)
-    useEffect(() => {    
-        if(localStorage.length > 0) {
-            if(currentPage === 1 && sortedData.length >= entry){
-                setFirstEntry(1)
-                setMaxEntries(entry)
-                setCurrentPage(1)
+    useEffect(() => {
+        if(localStorage.length > 0){
+            if(currentPage.current === 0){
                 document.getElementById('prev-btn').style.background = 'none'
-                document.getElementById('next-btn').style.background = '#687e12'
-            }else if(sortedData.length <= entry * currentPage) {
-                setMaxEntries(sortedData.length)
                 document.getElementById('next-btn').style.background = 'none'
-                document.getElementById('prev-btn').style.background = '#687e12'
+            }else if(firstEntry === 1) {
+                document.getElementById('prev-btn').style.background = 'none'
             }else{
                 document.getElementById('prev-btn').style.background = '#687e12'
-                document.getElementById('next-btn').style.background = '#687e12'
-                setMaxEntries(entry * currentPage)
-            }
-            setCurrentPage((entry * currentPage)/entry)
-            setFirstEntry(((currentPage * entry) - entry + 1))
-            if(pages.length === 0 || pages.length === 1){
-                document.getElementById('prev-btn').style.background = 'none'
+            }if(maxEntries === sortedData.length){
                 document.getElementById('next-btn').style.background = 'none'
+            }else{
+                document.getElementById('next-btn').style.background = '#687e12'
             }
-        }
-    },[currentPage, entry, maxEntries, pages.length, sortedData])
+        }  
+    },[currentPage, firstEntry, maxEntries, sortedData])
     return(
         <div id="employee-div" className="container">
             <h3 className='list-title'>Current Employees</h3>
@@ -189,13 +208,13 @@ function DataTable(props) {
                     <tr> 
                         <td colSpan='6'>Showing {firstEntry} To {maxEntries} Of {sortedData.length} Entries {sortedData.length < data.length && ' (filtered from ' + data.length + ' total entries)'}</td>
                         <td>
-                            <button id='prev-btn' onClick={handlePrev}>Preview</button>
+                            <button id='prev-btn' onClick={handlePrevNext}>Preview</button>
                         </td>
                         <td className="pages">
-                            {data.length > 0 && pages.map(page => {return <div onClick={selectPage} key={page}>{(page)}</div>})}
+                            {data.length > 0 && pages.map(page => {return <div className='page-number' onClick={selectPage} key={page}>{(page)}</div>})}
                         </td>
                         <td>
-                            <button id='next-btn' onClick={handleNext}>Next</button>
+                            <button id='next-btn' onClick={handlePrevNext}>Next</button>
                         </td>
                     </tr>
                 </tfoot>
