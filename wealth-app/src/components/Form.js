@@ -44,7 +44,6 @@ function Form(){
         } 
         employees.push(employee)
         localStorage.setItem('employees', JSON.stringify(employees))
-        localStorage.getItem('employees')
         openModal()
         console.log(employee)
     }
