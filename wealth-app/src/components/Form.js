@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState, useContext } from 'react';
+import { EmployeeContext } from './employeeContext';
 import Modal from "react-modal"
 import DatePicker from "react-datepicker";
 import Select from 'react-select'
 import "react-datepicker/dist/react-datepicker.css"
-
 
 const customStyles = {
     content: {
@@ -25,12 +25,11 @@ const options = [
 
 
 function Form(){
+    const { addEmployee } = useContext(EmployeeContext)
     const [startDate, setStartDate] = useState(new Date())
     const [dayOfBirth, setDayOfBirth] = useState(new Date())
-    console.log(dayOfBirth, startDate)
     const saveEmployee = (e) => {
         e.preventDefault()
-        const employees = JSON.parse(localStorage.getItem('employees')) || []
         const employee = {
             firstName: e.target.firstName.value,
             lastName: e.target.lastName.value,
@@ -41,14 +40,12 @@ function Form(){
             state: e.target.state.value,
             city: e.target.city.value,
             zipCode: e.target.zipCode.value
-        } 
-        employees.push(employee)
-        localStorage.setItem('employees', JSON.stringify(employees))
+        }
+        addEmployee(employee)
         openModal()
-        console.log(employee)
     }
+    
     const [modalIsOpen, setIsOpen] = useState(false);
-  
     function openModal() {
       setIsOpen(true);
     }
@@ -56,48 +53,48 @@ function Form(){
         setIsOpen(false)
     }
     return(
-        <form onSubmit={saveEmployee} id="create-employee">
-            <label htmlFor="first-name">First Name</label>
-            <input type="text" id="first-name" name="firstName" required/>
+            <form onSubmit={saveEmployee} id="create-employee">
+                <label htmlFor="first-name">First Name</label>
+                <input type="text" id="first-name" name="firstName" required/>
 
-            <label htmlFor="last-name">Last Name</label>
-            <input type="text" id="last-name" name="lastName" required/>
+                <label htmlFor="last-name">Last Name</label>
+                <input type="text" id="last-name" name="lastName" required/>
 
-            <label htmlFor="date-of-birth">Date of Birth</label>
-            <DatePicker id="date-of-birth" name="dateOfBirth" selected={dayOfBirth} onChange={(date) => setDayOfBirth(date)} />
+                <label htmlFor="date-of-birth">Date of Birth</label>
+                <DatePicker id="date-of-birth" name="dateOfBirth" selected={dayOfBirth} onChange={(date) => setDayOfBirth(date)} />
 
-            <label htmlFor="start-date">Start Date</label>
-            <DatePicker id="start-date" name="startDate" selected={startDate} onChange={(date) => setStartDate(date)} />
+                <label htmlFor="start-date">Start Date</label>
+                <DatePicker id="start-date" name="startDate" selected={startDate} onChange={(date) => setStartDate(date)} />
 
-            <fieldset className="address">
-                <legend>Address</legend>
+                <fieldset className="address">
+                    <legend>Address</legend>
 
-                <label htmlFor="street">Street</label>
-                <input id="street" type="text" name="street"/>
+                    <label htmlFor="street">Street</label>
+                    <input id="street" type="text" name="street"/>
 
-                <label htmlFor="city">City</label>
-                <input id="city" type="text" name="city"/>
+                    <label htmlFor="city">City</label>
+                    <input id="city" type="text" name="city"/>
 
-                <label htmlFor="state">State</label>
-                <Select options={states} name="state" />
+                    <label htmlFor="state">State</label>
+                    <Select options={states} name="state" />
 
 
-                <label htmlFor="zip-code">Zip Code</label>
-                <input id="zip-code" type="number" name="zipCode" />
-            </fieldset>
+                    <label htmlFor="zip-code">Zip Code</label>
+                    <input id="zip-code" type="number" name="zipCode" />
+                </fieldset>
 
-            <label htmlFor="department">Department</label>
-            <Select options={options} name="department" />
-            <button id="submit">save</button>
-            <Modal
-                isOpen={modalIsOpen}
-                ariaHideApp={false}
-                onRequestClose={closeModal}
-                style={customStyles}>
-                <button className="close" onClick={closeModal}>X</button>
-                <h2 id="confirmation" className="modal">Employee Created!</h2>
-            </Modal>
-        </form>
+                <label htmlFor="department">Department</label>
+                <Select options={options} name="department" />
+                <button id="submit">save</button>
+                <Modal
+                    isOpen={modalIsOpen}
+                    ariaHideApp={false}
+                    onRequestClose={closeModal}
+                    style={customStyles}>
+                    <button className="close" onClick={closeModal}>X</button>
+                    <h2 id="confirmation" className="modal">Employee Created!</h2>
+                </Modal>
+            </form>
     )
 }
 
