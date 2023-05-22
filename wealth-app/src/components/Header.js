@@ -10,7 +10,6 @@ function Header(){
             <h2>
                 Create Employee
             </h2>
-            <button onClick={() => localStorage.clear()} className="prov">clear Storage</button>
         </header>
     )
 }
